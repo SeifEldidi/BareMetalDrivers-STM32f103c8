@@ -1,0 +1,4 @@
+HAL_Gpio.c:11:6:HAL_Init_PIN	32	static
+HAL_Gpio.c:91:6:HAL_DeInit_PIN	16	static
+HAL_Gpio.c:96:6:HAL_Write_PIN	24	static
+HAL_Gpio.c:112:6:HAL_Toggle_PIN	16	static
