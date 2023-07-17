@@ -1,0 +1,1224 @@
+
+1_gpio_output.elf:     file format elf32-littlearm
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .isr_vector   00000130  08000000  08000000  00010000  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  1 .text         0000071c  08000130  08000130  00010130  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .rodata       00000028  0800084c  0800084c  0001084c  2**2
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  3 .ARM.extab    00000000  08000874  08000874  0001087c  2**0
+                  CONTENTS
+  4 .ARM          00000000  08000874  08000874  0001087c  2**0
+                  CONTENTS
+  5 .preinit_array 00000000  08000874  0800087c  0001087c  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  6 .init_array   00000004  08000874  08000874  00010874  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+  7 .fini_array   00000004  08000878  08000878  00010878  2**2
+                  CONTENTS, ALLOC, LOAD, DATA
+  8 .data         00000000  20000000  20000000  0001087c  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  9 .bss          00000020  20000000  0800087c  00020000  2**2
+                  ALLOC
+ 10 ._user_heap_stack 00000600  20000020  0800087c  00020020  2**0
+                  ALLOC
+ 11 .ARM.attributes 00000029  00000000  00000000  0001087c  2**0
+                  CONTENTS, READONLY
+ 12 .debug_info   000015c6  00000000  00000000  000108a5  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 13 .debug_abbrev 00000561  00000000  00000000  00011e6b  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 14 .debug_aranges 000000d8  00000000  00000000  000123d0  2**3
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 15 .debug_ranges 000000a0  00000000  00000000  000124a8  2**3
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 16 .debug_macro  00011221  00000000  00000000  00012548  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 17 .debug_line   00001434  00000000  00000000  00023769  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 18 .debug_str    00059187  00000000  00000000  00024b9d  2**0
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+ 19 .comment      00000053  00000000  00000000  0007dd24  2**0
+                  CONTENTS, READONLY
+ 20 .debug_frame  00000258  00000000  00000000  0007dd78  2**2
+                  CONTENTS, READONLY, DEBUGGING, OCTETS
+
+Disassembly of section .text:
+
+08000130 <__do_global_dtors_aux>:
+ 8000130:	b510      	push	{r4, lr}
+ 8000132:	4c05      	ldr	r4, [pc, #20]	; (8000148 <__do_global_dtors_aux+0x18>)
+ 8000134:	7823      	ldrb	r3, [r4, #0]
+ 8000136:	b933      	cbnz	r3, 8000146 <__do_global_dtors_aux+0x16>
+ 8000138:	4b04      	ldr	r3, [pc, #16]	; (800014c <__do_global_dtors_aux+0x1c>)
+ 800013a:	b113      	cbz	r3, 8000142 <__do_global_dtors_aux+0x12>
+ 800013c:	4804      	ldr	r0, [pc, #16]	; (8000150 <__do_global_dtors_aux+0x20>)
+ 800013e:	f3af 8000 	nop.w
+ 8000142:	2301      	movs	r3, #1
+ 8000144:	7023      	strb	r3, [r4, #0]
+ 8000146:	bd10      	pop	{r4, pc}
+ 8000148:	20000000 	.word	0x20000000
+ 800014c:	00000000 	.word	0x00000000
+ 8000150:	08000834 	.word	0x08000834
+
+08000154 <frame_dummy>:
+ 8000154:	b508      	push	{r3, lr}
+ 8000156:	4b03      	ldr	r3, [pc, #12]	; (8000164 <frame_dummy+0x10>)
+ 8000158:	b11b      	cbz	r3, 8000162 <frame_dummy+0xe>
+ 800015a:	4903      	ldr	r1, [pc, #12]	; (8000168 <frame_dummy+0x14>)
+ 800015c:	4803      	ldr	r0, [pc, #12]	; (800016c <frame_dummy+0x18>)
+ 800015e:	f3af 8000 	nop.w
+ 8000162:	bd08      	pop	{r3, pc}
+ 8000164:	00000000 	.word	0x00000000
+ 8000168:	20000004 	.word	0x20000004
+ 800016c:	08000834 	.word	0x08000834
+
+08000170 <HAL_Init_PIN>:
+#include "HAL_Gpio.h"
+
+/*Will be updated With Interrupts Soon*/
+
+void HAL_Init_PIN(GPIO_TypeDef *GPIO_PORT,GPIO_t *GPIO_PIN)
+{
+ 8000170:	b480      	push	{r7}
+ 8000172:	b087      	sub	sp, #28
+ 8000174:	af00      	add	r7, sp, #0
+ 8000176:	6078      	str	r0, [r7, #4]
+ 8000178:	6039      	str	r1, [r7, #0]
+	uint32_t Pin_Number=((uint32_t)GPIO_PIN->PIN);
+ 800017a:	683b      	ldr	r3, [r7, #0]
+ 800017c:	689b      	ldr	r3, [r3, #8]
+ 800017e:	613b      	str	r3, [r7, #16]
+	uint32_t REG_VAL=0x00;
+ 8000180:	2300      	movs	r3, #0
+ 8000182:	617b      	str	r3, [r7, #20]
+	volatile uint32_t *CONFIG_REG=NULL;
+ 8000184:	2300      	movs	r3, #0
+ 8000186:	60fb      	str	r3, [r7, #12]
+	uint32_t RegisterOffset=0x00;
+ 8000188:	2300      	movs	r3, #0
+ 800018a:	60bb      	str	r3, [r7, #8]
+
+	/*Enable Perripheral CLK through RCC Registers*/
+
+	if(GPIO_PORT==GPIOA)
+ 800018c:	687b      	ldr	r3, [r7, #4]
+ 800018e:	4a5c      	ldr	r2, [pc, #368]	; (8000300 <HAL_Init_PIN+0x190>)
+ 8000190:	4293      	cmp	r3, r2
+ 8000192:	d106      	bne.n	80001a2 <HAL_Init_PIN+0x32>
+	{
+		__HAL_RCC_GPIOA_EN();
+ 8000194:	4b5b      	ldr	r3, [pc, #364]	; (8000304 <HAL_Init_PIN+0x194>)
+ 8000196:	699b      	ldr	r3, [r3, #24]
+ 8000198:	4a5a      	ldr	r2, [pc, #360]	; (8000304 <HAL_Init_PIN+0x194>)
+ 800019a:	f043 0304 	orr.w	r3, r3, #4
+ 800019e:	6193      	str	r3, [r2, #24]
+ 80001a0:	e02a      	b.n	80001f8 <HAL_Init_PIN+0x88>
+	}else if(GPIO_PORT==GPIOB)
+ 80001a2:	687b      	ldr	r3, [r7, #4]
+ 80001a4:	4a58      	ldr	r2, [pc, #352]	; (8000308 <HAL_Init_PIN+0x198>)
+ 80001a6:	4293      	cmp	r3, r2
+ 80001a8:	d106      	bne.n	80001b8 <HAL_Init_PIN+0x48>
+	{
+		__HAL_RCC_GPIOB_EN();
+ 80001aa:	4b56      	ldr	r3, [pc, #344]	; (8000304 <HAL_Init_PIN+0x194>)
+ 80001ac:	699b      	ldr	r3, [r3, #24]
+ 80001ae:	4a55      	ldr	r2, [pc, #340]	; (8000304 <HAL_Init_PIN+0x194>)
+ 80001b0:	f043 0308 	orr.w	r3, r3, #8
+ 80001b4:	6193      	str	r3, [r2, #24]
+ 80001b6:	e01f      	b.n	80001f8 <HAL_Init_PIN+0x88>
+	}else if(GPIO_PORT==GPIOC)
+ 80001b8:	687b      	ldr	r3, [r7, #4]
+ 80001ba:	4a54      	ldr	r2, [pc, #336]	; (800030c <HAL_Init_PIN+0x19c>)
+ 80001bc:	4293      	cmp	r3, r2
+ 80001be:	d106      	bne.n	80001ce <HAL_Init_PIN+0x5e>
+	{
+		__HAL_RCC_GPIOC_EN();
+ 80001c0:	4b50      	ldr	r3, [pc, #320]	; (8000304 <HAL_Init_PIN+0x194>)
+ 80001c2:	699b      	ldr	r3, [r3, #24]
+ 80001c4:	4a4f      	ldr	r2, [pc, #316]	; (8000304 <HAL_Init_PIN+0x194>)
+ 80001c6:	f043 0310 	orr.w	r3, r3, #16
+ 80001ca:	6193      	str	r3, [r2, #24]
+ 80001cc:	e014      	b.n	80001f8 <HAL_Init_PIN+0x88>
+	}else if(GPIO_PORT==GPIOD)
+ 80001ce:	687b      	ldr	r3, [r7, #4]
+ 80001d0:	4a4f      	ldr	r2, [pc, #316]	; (8000310 <HAL_Init_PIN+0x1a0>)
+ 80001d2:	4293      	cmp	r3, r2
+ 80001d4:	d106      	bne.n	80001e4 <HAL_Init_PIN+0x74>
+	{
+		__HAL_RCC_GPIOD_EN();
+ 80001d6:	4b4b      	ldr	r3, [pc, #300]	; (8000304 <HAL_Init_PIN+0x194>)
+ 80001d8:	699b      	ldr	r3, [r3, #24]
+ 80001da:	4a4a      	ldr	r2, [pc, #296]	; (8000304 <HAL_Init_PIN+0x194>)
+ 80001dc:	f043 0320 	orr.w	r3, r3, #32
+ 80001e0:	6193      	str	r3, [r2, #24]
+ 80001e2:	e009      	b.n	80001f8 <HAL_Init_PIN+0x88>
+	}else if(GPIO_PORT==GPIOE)
+ 80001e4:	687b      	ldr	r3, [r7, #4]
+ 80001e6:	4a4b      	ldr	r2, [pc, #300]	; (8000314 <HAL_Init_PIN+0x1a4>)
+ 80001e8:	4293      	cmp	r3, r2
+ 80001ea:	d105      	bne.n	80001f8 <HAL_Init_PIN+0x88>
+	{
+		__HAL_RCC_GPIOE_EN();
+ 80001ec:	4b45      	ldr	r3, [pc, #276]	; (8000304 <HAL_Init_PIN+0x194>)
+ 80001ee:	699b      	ldr	r3, [r3, #24]
+ 80001f0:	4a44      	ldr	r2, [pc, #272]	; (8000304 <HAL_Init_PIN+0x194>)
+ 80001f2:	f043 0340 	orr.w	r3, r3, #64	; 0x40
+ 80001f6:	6193      	str	r3, [r2, #24]
+	}else{
+
+	}
+	/**Set status of PIN*/
+	if( Pin_Number != 0x00U)
+ 80001f8:	693b      	ldr	r3, [r7, #16]
+ 80001fa:	2b00      	cmp	r3, #0
+ 80001fc:	d07b      	beq.n	80002f6 <HAL_Init_PIN+0x186>
+	{
+		switch(GPIO_PIN->Mode)
+ 80001fe:	683b      	ldr	r3, [r7, #0]
+ 8000200:	681b      	ldr	r3, [r3, #0]
+ 8000202:	3b01      	subs	r3, #1
+ 8000204:	2b05      	cmp	r3, #5
+ 8000206:	d84e      	bhi.n	80002a6 <HAL_Init_PIN+0x136>
+ 8000208:	a201      	add	r2, pc, #4	; (adr r2, 8000210 <HAL_Init_PIN+0xa0>)
+ 800020a:	f852 f023 	ldr.w	pc, [r2, r3, lsl #2]
+ 800020e:	bf00      	nop
+ 8000210:	08000229 	.word	0x08000229
+ 8000214:	08000231 	.word	0x08000231
+ 8000218:	0800023b 	.word	0x0800023b
+ 800021c:	08000245 	.word	0x08000245
+ 8000220:	0800024f 	.word	0x0800024f
+ 8000224:	080002a1 	.word	0x080002a1
+		{
+			case HAL_GPIO_OUT_PP:
+				REG_VAL=HAL_GPIO_OUT_PP_MSK+(GPIO_PIN->SPEED);
+ 8000228:	683b      	ldr	r3, [r7, #0]
+ 800022a:	685b      	ldr	r3, [r3, #4]
+ 800022c:	617b      	str	r3, [r7, #20]
+				break;
+ 800022e:	e03d      	b.n	80002ac <HAL_Init_PIN+0x13c>
+			case HAL_GPIO_OUT_OD:
+				REG_VAL=HAL_GPIO_OUT_OD_MSK	+(GPIO_PIN->SPEED);
+ 8000230:	683b      	ldr	r3, [r7, #0]
+ 8000232:	685b      	ldr	r3, [r3, #4]
+ 8000234:	3304      	adds	r3, #4
+ 8000236:	617b      	str	r3, [r7, #20]
+				break;
+ 8000238:	e038      	b.n	80002ac <HAL_Init_PIN+0x13c>
+			case HAL_GPIO_OUT_ALT_PP:
+				REG_VAL=HAL_GPIO_OUT_ALTPP_MSK+(GPIO_PIN->SPEED);
+ 800023a:	683b      	ldr	r3, [r7, #0]
+ 800023c:	685b      	ldr	r3, [r3, #4]
+ 800023e:	3308      	adds	r3, #8
+ 8000240:	617b      	str	r3, [r7, #20]
+				break;
+ 8000242:	e033      	b.n	80002ac <HAL_Init_PIN+0x13c>
+			case HAL_GPIO_OUT_ALT_OD:
+				REG_VAL=HAL_GPIO_OUT_ALTOD_MSK+(GPIO_PIN->SPEED);
+ 8000244:	683b      	ldr	r3, [r7, #0]
+ 8000246:	685b      	ldr	r3, [r3, #4]
+ 8000248:	330c      	adds	r3, #12
+ 800024a:	617b      	str	r3, [r7, #20]
+				break;
+ 800024c:	e02e      	b.n	80002ac <HAL_Init_PIN+0x13c>
+			case HAL_GPIO_IN:
+				switch(GPIO_PIN->PULL)
+ 800024e:	683b      	ldr	r3, [r7, #0]
+ 8000250:	68db      	ldr	r3, [r3, #12]
+ 8000252:	2b02      	cmp	r3, #2
+ 8000254:	d016      	beq.n	8000284 <HAL_Init_PIN+0x114>
+ 8000256:	2b02      	cmp	r3, #2
+ 8000258:	d827      	bhi.n	80002aa <HAL_Init_PIN+0x13a>
+ 800025a:	2b00      	cmp	r3, #0
+ 800025c:	d002      	beq.n	8000264 <HAL_Init_PIN+0xf4>
+ 800025e:	2b01      	cmp	r3, #1
+ 8000260:	d003      	beq.n	800026a <HAL_Init_PIN+0xfa>
+					case HAL_GPIO_PULLDOWN:
+						REG_VAL=HAL_GPIO_IN_MSK+HAL_GPIO_IN_PULLUP_MSK;
+						SET_BIT(GPIO_PORT->BRR,(uint32_t)GPIO_PIN->PIN);
+						break;
+				}
+				break;
+ 8000262:	e022      	b.n	80002aa <HAL_Init_PIN+0x13a>
+						REG_VAL=HAL_GPIO_IN_MSK+HAL_GPIO_IN_NO_PULL_MSK;
+ 8000264:	2304      	movs	r3, #4
+ 8000266:	617b      	str	r3, [r7, #20]
+						break;
+ 8000268:	e019      	b.n	800029e <HAL_Init_PIN+0x12e>
+						REG_VAL=HAL_GPIO_IN_MSK+HAL_GPIO_IN_PULLD_MSK;
+ 800026a:	230c      	movs	r3, #12
+ 800026c:	617b      	str	r3, [r7, #20]
+						SET_BIT(GPIO_PORT->BSRR,(uint32_t)GPIO_PIN->PIN);
+ 800026e:	687b      	ldr	r3, [r7, #4]
+ 8000270:	691a      	ldr	r2, [r3, #16]
+ 8000272:	683b      	ldr	r3, [r7, #0]
+ 8000274:	689b      	ldr	r3, [r3, #8]
+ 8000276:	2101      	movs	r1, #1
+ 8000278:	fa01 f303 	lsl.w	r3, r1, r3
+ 800027c:	431a      	orrs	r2, r3
+ 800027e:	687b      	ldr	r3, [r7, #4]
+ 8000280:	611a      	str	r2, [r3, #16]
+						break;
+ 8000282:	e00c      	b.n	800029e <HAL_Init_PIN+0x12e>
+						REG_VAL=HAL_GPIO_IN_MSK+HAL_GPIO_IN_PULLUP_MSK;
+ 8000284:	230c      	movs	r3, #12
+ 8000286:	617b      	str	r3, [r7, #20]
+						SET_BIT(GPIO_PORT->BRR,(uint32_t)GPIO_PIN->PIN);
+ 8000288:	687b      	ldr	r3, [r7, #4]
+ 800028a:	695a      	ldr	r2, [r3, #20]
+ 800028c:	683b      	ldr	r3, [r7, #0]
+ 800028e:	689b      	ldr	r3, [r3, #8]
+ 8000290:	2101      	movs	r1, #1
+ 8000292:	fa01 f303 	lsl.w	r3, r1, r3
+ 8000296:	431a      	orrs	r2, r3
+ 8000298:	687b      	ldr	r3, [r7, #4]
+ 800029a:	615a      	str	r2, [r3, #20]
+						break;
+ 800029c:	bf00      	nop
+				break;
+ 800029e:	e004      	b.n	80002aa <HAL_Init_PIN+0x13a>
+			case HAL_GPIO_IN_AN:
+				REG_VAL=HAL_GPIO_IN_AN_MSK+HAL_GPIO_IN_MSK;
+ 80002a0:	2300      	movs	r3, #0
+ 80002a2:	617b      	str	r3, [r7, #20]
+				break;
+ 80002a4:	e002      	b.n	80002ac <HAL_Init_PIN+0x13c>
+			default:
+				break;
+ 80002a6:	bf00      	nop
+ 80002a8:	e000      	b.n	80002ac <HAL_Init_PIN+0x13c>
+				break;
+ 80002aa:	bf00      	nop
+		}
+		/*Select Either CRH or CRL depending on position of the bit*/
+		CONFIG_REG=Pin_Number>8?&GPIO_PORT->CRH:&GPIO_PORT->CRL;
+ 80002ac:	693b      	ldr	r3, [r7, #16]
+ 80002ae:	2b08      	cmp	r3, #8
+ 80002b0:	d902      	bls.n	80002b8 <HAL_Init_PIN+0x148>
+ 80002b2:	687b      	ldr	r3, [r7, #4]
+ 80002b4:	3304      	adds	r3, #4
+ 80002b6:	e000      	b.n	80002ba <HAL_Init_PIN+0x14a>
+ 80002b8:	687b      	ldr	r3, [r7, #4]
+ 80002ba:	60fb      	str	r3, [r7, #12]
+
+		/*Determine Bit offset if the pin number is greater simply subtract and multiply by 4 or left shift by 2 2^2=4 */
+		RegisterOffset=Pin_Number>8?((Pin_Number-8)<<2U):((Pin_Number)<<2U);
+ 80002bc:	693b      	ldr	r3, [r7, #16]
+ 80002be:	2b08      	cmp	r3, #8
+ 80002c0:	d903      	bls.n	80002ca <HAL_Init_PIN+0x15a>
+ 80002c2:	693b      	ldr	r3, [r7, #16]
+ 80002c4:	3b08      	subs	r3, #8
+ 80002c6:	009b      	lsls	r3, r3, #2
+ 80002c8:	e001      	b.n	80002ce <HAL_Init_PIN+0x15e>
+ 80002ca:	693b      	ldr	r3, [r7, #16]
+ 80002cc:	009b      	lsls	r3, r3, #2
+ 80002ce:	60bb      	str	r3, [r7, #8]
+
+		/*Clear Bits of Certain Pin*/
+		(*CONFIG_REG)&=~(CLEAR_MASK_GPIO<<RegisterOffset);
+ 80002d0:	68fb      	ldr	r3, [r7, #12]
+ 80002d2:	681a      	ldr	r2, [r3, #0]
+ 80002d4:	210f      	movs	r1, #15
+ 80002d6:	68bb      	ldr	r3, [r7, #8]
+ 80002d8:	fa01 f303 	lsl.w	r3, r1, r3
+ 80002dc:	43db      	mvns	r3, r3
+ 80002de:	401a      	ands	r2, r3
+ 80002e0:	68fb      	ldr	r3, [r7, #12]
+ 80002e2:	601a      	str	r2, [r3, #0]
+
+		/*Set Bits of Certain Pin*/
+		(*CONFIG_REG)|=(REG_VAL<<RegisterOffset);
+ 80002e4:	68fb      	ldr	r3, [r7, #12]
+ 80002e6:	681a      	ldr	r2, [r3, #0]
+ 80002e8:	6979      	ldr	r1, [r7, #20]
+ 80002ea:	68bb      	ldr	r3, [r7, #8]
+ 80002ec:	fa01 f303 	lsl.w	r3, r1, r3
+ 80002f0:	431a      	orrs	r2, r3
+ 80002f2:	68fb      	ldr	r3, [r7, #12]
+ 80002f4:	601a      	str	r2, [r3, #0]
+	}
+}
+ 80002f6:	bf00      	nop
+ 80002f8:	371c      	adds	r7, #28
+ 80002fa:	46bd      	mov	sp, r7
+ 80002fc:	bc80      	pop	{r7}
+ 80002fe:	4770      	bx	lr
+ 8000300:	40010800 	.word	0x40010800
+ 8000304:	40021000 	.word	0x40021000
+ 8000308:	40010c00 	.word	0x40010c00
+ 800030c:	40011000 	.word	0x40011000
+ 8000310:	40011400 	.word	0x40011400
+ 8000314:	40011800 	.word	0x40011800
+
+08000318 <HAL_Write_PIN>:
+{
+
+}
+
+void HAL_Write_PIN(GPIO_TypeDef *GPIO_PORT,GPIO_t *GPIO_PIN,GPIO_STATE State)
+{
+ 8000318:	b480      	push	{r7}
+ 800031a:	b085      	sub	sp, #20
+ 800031c:	af00      	add	r7, sp, #0
+ 800031e:	60f8      	str	r0, [r7, #12]
+ 8000320:	60b9      	str	r1, [r7, #8]
+ 8000322:	4613      	mov	r3, r2
+ 8000324:	71fb      	strb	r3, [r7, #7]
+	if (GPIO_PORT != NULL && GPIO_PIN != NULL) {
+ 8000326:	68fb      	ldr	r3, [r7, #12]
+ 8000328:	2b00      	cmp	r3, #0
+ 800032a:	d01d      	beq.n	8000368 <HAL_Write_PIN+0x50>
+ 800032c:	68bb      	ldr	r3, [r7, #8]
+ 800032e:	2b00      	cmp	r3, #0
+ 8000330:	d01a      	beq.n	8000368 <HAL_Write_PIN+0x50>
+		switch (State) {
+ 8000332:	79fb      	ldrb	r3, [r7, #7]
+ 8000334:	2b00      	cmp	r3, #0
+ 8000336:	d00c      	beq.n	8000352 <HAL_Write_PIN+0x3a>
+ 8000338:	2b01      	cmp	r3, #1
+ 800033a:	d117      	bne.n	800036c <HAL_Write_PIN+0x54>
+		case GPIO_RESET:
+			SET_BIT(GPIO_PORT->BRR, (uint32_t )GPIO_PIN->PIN);
+ 800033c:	68fb      	ldr	r3, [r7, #12]
+ 800033e:	695a      	ldr	r2, [r3, #20]
+ 8000340:	68bb      	ldr	r3, [r7, #8]
+ 8000342:	689b      	ldr	r3, [r3, #8]
+ 8000344:	2101      	movs	r1, #1
+ 8000346:	fa01 f303 	lsl.w	r3, r1, r3
+ 800034a:	431a      	orrs	r2, r3
+ 800034c:	68fb      	ldr	r3, [r7, #12]
+ 800034e:	615a      	str	r2, [r3, #20]
+			break;
+ 8000350:	e00d      	b.n	800036e <HAL_Write_PIN+0x56>
+		case GPIO_SET:
+			SET_BIT(GPIO_PORT->BSRR, (uint32_t )GPIO_PIN->PIN);
+ 8000352:	68fb      	ldr	r3, [r7, #12]
+ 8000354:	691a      	ldr	r2, [r3, #16]
+ 8000356:	68bb      	ldr	r3, [r7, #8]
+ 8000358:	689b      	ldr	r3, [r3, #8]
+ 800035a:	2101      	movs	r1, #1
+ 800035c:	fa01 f303 	lsl.w	r3, r1, r3
+ 8000360:	431a      	orrs	r2, r3
+ 8000362:	68fb      	ldr	r3, [r7, #12]
+ 8000364:	611a      	str	r2, [r3, #16]
+			break;
+ 8000366:	e002      	b.n	800036e <HAL_Write_PIN+0x56>
+		default:
+			break;
+		}
+	}
+ 8000368:	bf00      	nop
+ 800036a:	e000      	b.n	800036e <HAL_Write_PIN+0x56>
+			break;
+ 800036c:	bf00      	nop
+}
+ 800036e:	bf00      	nop
+ 8000370:	3714      	adds	r7, #20
+ 8000372:	46bd      	mov	sp, r7
+ 8000374:	bc80      	pop	{r7}
+ 8000376:	4770      	bx	lr
+
+08000378 <Baud_Rate_Gen>:
+ *      Author: Seif pc
+ */
+#include "HAL_Usart.h"
+
+static uint16_t Baud_Rate_Gen(uint32_t PERIPH_CLK,uint32_t BAUD_rate)
+{
+ 8000378:	b480      	push	{r7}
+ 800037a:	b083      	sub	sp, #12
+ 800037c:	af00      	add	r7, sp, #0
+ 800037e:	6078      	str	r0, [r7, #4]
+ 8000380:	6039      	str	r1, [r7, #0]
+	return ((PERIPH_CLK + (BAUD_rate / 2)) / BAUD_rate);
+ 8000382:	683b      	ldr	r3, [r7, #0]
+ 8000384:	085a      	lsrs	r2, r3, #1
+ 8000386:	687b      	ldr	r3, [r7, #4]
+ 8000388:	441a      	add	r2, r3
+ 800038a:	683b      	ldr	r3, [r7, #0]
+ 800038c:	fbb2 f3f3 	udiv	r3, r2, r3
+ 8000390:	b29b      	uxth	r3, r3
+}
+ 8000392:	4618      	mov	r0, r3
+ 8000394:	370c      	adds	r7, #12
+ 8000396:	46bd      	mov	sp, r7
+ 8000398:	bc80      	pop	{r7}
+ 800039a:	4770      	bx	lr
+
+0800039c <HAL_UART_Init>:
+
+void HAL_UART_Init(UART_t *HAL_Uart)
+{
+ 800039c:	b580      	push	{r7, lr}
+ 800039e:	b08c      	sub	sp, #48	; 0x30
+ 80003a0:	af00      	add	r7, sp, #0
+ 80003a2:	6078      	str	r0, [r7, #4]
+	if(HAL_Uart!=NULL)
+ 80003a4:	687b      	ldr	r3, [r7, #4]
+ 80003a6:	2b00      	cmp	r3, #0
+ 80003a8:	f000 8131 	beq.w	800060e <HAL_UART_Init+0x272>
+	{
+		USART_TypeDef *HAL_USART_CONFIG=HAL_Uart->Instance;
+ 80003ac:	687b      	ldr	r3, [r7, #4]
+ 80003ae:	681b      	ldr	r3, [r3, #0]
+ 80003b0:	62fb      	str	r3, [r7, #44]	; 0x2c
+		GPIO_TypeDef  *GPIO_PORT=NULL;
+ 80003b2:	2300      	movs	r3, #0
+ 80003b4:	62bb      	str	r3, [r7, #40]	; 0x28
+		GPIO_t TX;
+		GPIO_t RX;
+
+		TX.PIN=(HAL_Uart->Instance==USART1)?GPIO_PIN_9:(HAL_Uart->Instance==USART2)?GPIO_PIN_2:GPIO_PIN_10;
+ 80003b6:	687b      	ldr	r3, [r7, #4]
+ 80003b8:	681b      	ldr	r3, [r3, #0]
+ 80003ba:	4a97      	ldr	r2, [pc, #604]	; (8000618 <HAL_UART_Init+0x27c>)
+ 80003bc:	4293      	cmp	r3, r2
+ 80003be:	d008      	beq.n	80003d2 <HAL_UART_Init+0x36>
+ 80003c0:	687b      	ldr	r3, [r7, #4]
+ 80003c2:	681b      	ldr	r3, [r3, #0]
+ 80003c4:	4a95      	ldr	r2, [pc, #596]	; (800061c <HAL_UART_Init+0x280>)
+ 80003c6:	4293      	cmp	r3, r2
+ 80003c8:	d101      	bne.n	80003ce <HAL_UART_Init+0x32>
+ 80003ca:	2302      	movs	r3, #2
+ 80003cc:	e002      	b.n	80003d4 <HAL_UART_Init+0x38>
+ 80003ce:	230a      	movs	r3, #10
+ 80003d0:	e000      	b.n	80003d4 <HAL_UART_Init+0x38>
+ 80003d2:	2309      	movs	r3, #9
+ 80003d4:	623b      	str	r3, [r7, #32]
+		RX.PIN=(HAL_Uart->Instance==USART1)?GPIO_PIN_10:(HAL_Uart->Instance==USART2)?GPIO_PIN_3:GPIO_PIN_11;
+ 80003d6:	687b      	ldr	r3, [r7, #4]
+ 80003d8:	681b      	ldr	r3, [r3, #0]
+ 80003da:	4a8f      	ldr	r2, [pc, #572]	; (8000618 <HAL_UART_Init+0x27c>)
+ 80003dc:	4293      	cmp	r3, r2
+ 80003de:	d008      	beq.n	80003f2 <HAL_UART_Init+0x56>
+ 80003e0:	687b      	ldr	r3, [r7, #4]
+ 80003e2:	681b      	ldr	r3, [r3, #0]
+ 80003e4:	4a8d      	ldr	r2, [pc, #564]	; (800061c <HAL_UART_Init+0x280>)
+ 80003e6:	4293      	cmp	r3, r2
+ 80003e8:	d101      	bne.n	80003ee <HAL_UART_Init+0x52>
+ 80003ea:	2303      	movs	r3, #3
+ 80003ec:	e002      	b.n	80003f4 <HAL_UART_Init+0x58>
+ 80003ee:	230b      	movs	r3, #11
+ 80003f0:	e000      	b.n	80003f4 <HAL_UART_Init+0x58>
+ 80003f2:	230a      	movs	r3, #10
+ 80003f4:	613b      	str	r3, [r7, #16]
+
+		TX.SPEED=HAL_GPIO_SPEED_FREQ_HIGH;
+ 80003f6:	2303      	movs	r3, #3
+ 80003f8:	61fb      	str	r3, [r7, #28]
+		TX.Mode=HAL_GPIO_OUT_ALT_PP;
+ 80003fa:	2303      	movs	r3, #3
+ 80003fc:	61bb      	str	r3, [r7, #24]
+		RX.Mode=HAL_GPIO_IN;
+ 80003fe:	2305      	movs	r3, #5
+ 8000400:	60bb      	str	r3, [r7, #8]
+		RX.PULL=HAL_GPIO_NOPULL;
+ 8000402:	2300      	movs	r3, #0
+ 8000404:	617b      	str	r3, [r7, #20]
+
+		GPIO_PORT=((HAL_USART_CONFIG)==USART1)?GPIOA:((HAL_USART_CONFIG)==USART2)?GPIOA:GPIOB;
+ 8000406:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 8000408:	4a83      	ldr	r2, [pc, #524]	; (8000618 <HAL_UART_Init+0x27c>)
+ 800040a:	4293      	cmp	r3, r2
+ 800040c:	d007      	beq.n	800041e <HAL_UART_Init+0x82>
+ 800040e:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 8000410:	4a82      	ldr	r2, [pc, #520]	; (800061c <HAL_UART_Init+0x280>)
+ 8000412:	4293      	cmp	r3, r2
+ 8000414:	d101      	bne.n	800041a <HAL_UART_Init+0x7e>
+ 8000416:	4b82      	ldr	r3, [pc, #520]	; (8000620 <HAL_UART_Init+0x284>)
+ 8000418:	e002      	b.n	8000420 <HAL_UART_Init+0x84>
+ 800041a:	4b82      	ldr	r3, [pc, #520]	; (8000624 <HAL_UART_Init+0x288>)
+ 800041c:	e000      	b.n	8000420 <HAL_UART_Init+0x84>
+ 800041e:	4b80      	ldr	r3, [pc, #512]	; (8000620 <HAL_UART_Init+0x284>)
+ 8000420:	62bb      	str	r3, [r7, #40]	; 0x28
+
+		HAL_USART_CONFIG=HAL_Uart->Instance;
+ 8000422:	687b      	ldr	r3, [r7, #4]
+ 8000424:	681b      	ldr	r3, [r3, #0]
+ 8000426:	62fb      	str	r3, [r7, #44]	; 0x2c
+
+		/*Enable USART RCC CLOCK*/
+		if(HAL_USART_CONFIG == USART1)
+ 8000428:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 800042a:	4a7b      	ldr	r2, [pc, #492]	; (8000618 <HAL_UART_Init+0x27c>)
+ 800042c:	4293      	cmp	r3, r2
+ 800042e:	d106      	bne.n	800043e <HAL_UART_Init+0xa2>
+			HAL_RCC_USART1_EN();
+ 8000430:	4b7d      	ldr	r3, [pc, #500]	; (8000628 <HAL_UART_Init+0x28c>)
+ 8000432:	699b      	ldr	r3, [r3, #24]
+ 8000434:	4a7c      	ldr	r2, [pc, #496]	; (8000628 <HAL_UART_Init+0x28c>)
+ 8000436:	f443 4380 	orr.w	r3, r3, #16384	; 0x4000
+ 800043a:	6193      	str	r3, [r2, #24]
+ 800043c:	e014      	b.n	8000468 <HAL_UART_Init+0xcc>
+		else if(HAL_USART_CONFIG == USART2)
+ 800043e:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 8000440:	4a76      	ldr	r2, [pc, #472]	; (800061c <HAL_UART_Init+0x280>)
+ 8000442:	4293      	cmp	r3, r2
+ 8000444:	d106      	bne.n	8000454 <HAL_UART_Init+0xb8>
+			HAL_RCC_USART2_EN();
+ 8000446:	4b78      	ldr	r3, [pc, #480]	; (8000628 <HAL_UART_Init+0x28c>)
+ 8000448:	69db      	ldr	r3, [r3, #28]
+ 800044a:	4a77      	ldr	r2, [pc, #476]	; (8000628 <HAL_UART_Init+0x28c>)
+ 800044c:	f443 3300 	orr.w	r3, r3, #131072	; 0x20000
+ 8000450:	61d3      	str	r3, [r2, #28]
+ 8000452:	e009      	b.n	8000468 <HAL_UART_Init+0xcc>
+		else if(HAL_USART_CONFIG == USART3)
+ 8000454:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 8000456:	4a75      	ldr	r2, [pc, #468]	; (800062c <HAL_UART_Init+0x290>)
+ 8000458:	4293      	cmp	r3, r2
+ 800045a:	d105      	bne.n	8000468 <HAL_UART_Init+0xcc>
+			HAL_RCC_USART3_EN();
+ 800045c:	4b72      	ldr	r3, [pc, #456]	; (8000628 <HAL_UART_Init+0x28c>)
+ 800045e:	69db      	ldr	r3, [r3, #28]
+ 8000460:	4a71      	ldr	r2, [pc, #452]	; (8000628 <HAL_UART_Init+0x28c>)
+ 8000462:	f443 2380 	orr.w	r3, r3, #262144	; 0x40000
+ 8000466:	61d3      	str	r3, [r2, #28]
+
+		/*Init GPIO Pins TX,RX */
+		switch(HAL_Uart->Mode)
+ 8000468:	687b      	ldr	r3, [r7, #4]
+ 800046a:	695b      	ldr	r3, [r3, #20]
+ 800046c:	2b02      	cmp	r3, #2
+ 800046e:	d013      	beq.n	8000498 <HAL_UART_Init+0xfc>
+ 8000470:	2b02      	cmp	r3, #2
+ 8000472:	d837      	bhi.n	80004e4 <HAL_UART_Init+0x148>
+ 8000474:	2b00      	cmp	r3, #0
+ 8000476:	d002      	beq.n	800047e <HAL_UART_Init+0xe2>
+ 8000478:	2b01      	cmp	r3, #1
+ 800047a:	d01a      	beq.n	80004b2 <HAL_UART_Init+0x116>
+ 800047c:	e032      	b.n	80004e4 <HAL_UART_Init+0x148>
+		{
+			case HAL_USART_TRANSMIT_MODE:
+				HAL_USART_CONFIG->CR1|=HAL_USART_TRANSMIT_EN;
+ 800047e:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 8000480:	68db      	ldr	r3, [r3, #12]
+ 8000482:	f043 0208 	orr.w	r2, r3, #8
+ 8000486:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 8000488:	60da      	str	r2, [r3, #12]
+				HAL_Init_PIN(GPIO_PORT,&TX);
+ 800048a:	f107 0318 	add.w	r3, r7, #24
+ 800048e:	4619      	mov	r1, r3
+ 8000490:	6ab8      	ldr	r0, [r7, #40]	; 0x28
+ 8000492:	f7ff fe6d 	bl	8000170 <HAL_Init_PIN>
+				break;
+ 8000496:	e025      	b.n	80004e4 <HAL_UART_Init+0x148>
+			case HAL_USART_REC_MODE:
+				HAL_USART_CONFIG->CR1|=HAL_USART_RECIEVE_EN;
+ 8000498:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 800049a:	68db      	ldr	r3, [r3, #12]
+ 800049c:	f043 0204 	orr.w	r2, r3, #4
+ 80004a0:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 80004a2:	60da      	str	r2, [r3, #12]
+				HAL_Init_PIN(GPIO_PORT,&RX);
+ 80004a4:	f107 0308 	add.w	r3, r7, #8
+ 80004a8:	4619      	mov	r1, r3
+ 80004aa:	6ab8      	ldr	r0, [r7, #40]	; 0x28
+ 80004ac:	f7ff fe60 	bl	8000170 <HAL_Init_PIN>
+				break;
+ 80004b0:	e018      	b.n	80004e4 <HAL_UART_Init+0x148>
+			case HAL_USART_TRANSMIT_REC_MODE:
+				HAL_USART_CONFIG->CR1|=HAL_USART_TRANSMIT_EN;
+ 80004b2:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 80004b4:	68db      	ldr	r3, [r3, #12]
+ 80004b6:	f043 0208 	orr.w	r2, r3, #8
+ 80004ba:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 80004bc:	60da      	str	r2, [r3, #12]
+				HAL_USART_CONFIG->CR1|=HAL_USART_RECIEVE_EN;
+ 80004be:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 80004c0:	68db      	ldr	r3, [r3, #12]
+ 80004c2:	f043 0204 	orr.w	r2, r3, #4
+ 80004c6:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 80004c8:	60da      	str	r2, [r3, #12]
+				HAL_Init_PIN(GPIO_PORT,&RX);
+ 80004ca:	f107 0308 	add.w	r3, r7, #8
+ 80004ce:	4619      	mov	r1, r3
+ 80004d0:	6ab8      	ldr	r0, [r7, #40]	; 0x28
+ 80004d2:	f7ff fe4d 	bl	8000170 <HAL_Init_PIN>
+				HAL_Init_PIN(GPIO_PORT,&TX);
+ 80004d6:	f107 0318 	add.w	r3, r7, #24
+ 80004da:	4619      	mov	r1, r3
+ 80004dc:	6ab8      	ldr	r0, [r7, #40]	; 0x28
+ 80004de:	f7ff fe47 	bl	8000170 <HAL_Init_PIN>
+				break;
+ 80004e2:	bf00      	nop
+		}
+
+		switch(HAL_Uart->StopBits)
+ 80004e4:	687b      	ldr	r3, [r7, #4]
+ 80004e6:	68db      	ldr	r3, [r3, #12]
+ 80004e8:	2b03      	cmp	r3, #3
+ 80004ea:	d839      	bhi.n	8000560 <HAL_UART_Init+0x1c4>
+ 80004ec:	a201      	add	r2, pc, #4	; (adr r2, 80004f4 <HAL_UART_Init+0x158>)
+ 80004ee:	f852 f023 	ldr.w	pc, [r2, r3, lsl #2]
+ 80004f2:	bf00      	nop
+ 80004f4:	08000505 	.word	0x08000505
+ 80004f8:	08000513 	.word	0x08000513
+ 80004fc:	0800052d 	.word	0x0800052d
+ 8000500:	08000547 	.word	0x08000547
+		{
+			case HAL_USART_NO_STOP_BITS_1:
+				HAL_USART_CONFIG->CR2 &= (~(0x00000003<<HAL_USART_STOP));
+ 8000504:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 8000506:	691b      	ldr	r3, [r3, #16]
+ 8000508:	f423 5240 	bic.w	r2, r3, #12288	; 0x3000
+ 800050c:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 800050e:	611a      	str	r2, [r3, #16]
+				break;
+ 8000510:	e026      	b.n	8000560 <HAL_UART_Init+0x1c4>
+			case HAL_USART_NO_STOP_BITS_0_5:
+				HAL_USART_CONFIG->CR2 &= (~(0x00000003<<HAL_USART_STOP));
+ 8000512:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 8000514:	691b      	ldr	r3, [r3, #16]
+ 8000516:	f423 5240 	bic.w	r2, r3, #12288	; 0x3000
+ 800051a:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 800051c:	611a      	str	r2, [r3, #16]
+				HAL_USART_CONFIG->CR2 |= HAL_USART_STOP_0_5;
+ 800051e:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 8000520:	691b      	ldr	r3, [r3, #16]
+ 8000522:	f443 5280 	orr.w	r2, r3, #4096	; 0x1000
+ 8000526:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 8000528:	611a      	str	r2, [r3, #16]
+				break;
+ 800052a:	e019      	b.n	8000560 <HAL_UART_Init+0x1c4>
+			case HAL_USART_NO_STOP_BITS_1_5:
+				HAL_USART_CONFIG->CR2 &= (~(0x00000003<<HAL_USART_STOP));
+ 800052c:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 800052e:	691b      	ldr	r3, [r3, #16]
+ 8000530:	f423 5240 	bic.w	r2, r3, #12288	; 0x3000
+ 8000534:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 8000536:	611a      	str	r2, [r3, #16]
+				HAL_USART_CONFIG->CR2 |= HAL_USART_STOP_1_5;
+ 8000538:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 800053a:	691b      	ldr	r3, [r3, #16]
+ 800053c:	f443 5240 	orr.w	r2, r3, #12288	; 0x3000
+ 8000540:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 8000542:	611a      	str	r2, [r3, #16]
+				break;
+ 8000544:	e00c      	b.n	8000560 <HAL_UART_Init+0x1c4>
+			case HAL_USART_NO_STOP_BITS_2:
+				HAL_USART_CONFIG->CR2 &= (~(0x00000003<<HAL_USART_STOP));
+ 8000546:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 8000548:	691b      	ldr	r3, [r3, #16]
+ 800054a:	f423 5240 	bic.w	r2, r3, #12288	; 0x3000
+ 800054e:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 8000550:	611a      	str	r2, [r3, #16]
+				HAL_USART_CONFIG->CR2 |= HAL_USART_STOP_2;
+ 8000552:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 8000554:	691b      	ldr	r3, [r3, #16]
+ 8000556:	f443 5200 	orr.w	r2, r3, #8192	; 0x2000
+ 800055a:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 800055c:	611a      	str	r2, [r3, #16]
+				break;
+ 800055e:	bf00      	nop
+		}
+
+		switch(HAL_Uart->WordLength)
+ 8000560:	687b      	ldr	r3, [r7, #4]
+ 8000562:	689b      	ldr	r3, [r3, #8]
+ 8000564:	2b00      	cmp	r3, #0
+ 8000566:	d002      	beq.n	800056e <HAL_UART_Init+0x1d2>
+ 8000568:	2b01      	cmp	r3, #1
+ 800056a:	d007      	beq.n	800057c <HAL_UART_Init+0x1e0>
+ 800056c:	e013      	b.n	8000596 <HAL_UART_Init+0x1fa>
+		{
+			case HAL_USART_WORD_LENGTH_8:
+				HAL_USART_CONFIG->CR2 &= HAL_USART_WRDL8_MKS;
+ 800056e:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 8000570:	691b      	ldr	r3, [r3, #16]
+ 8000572:	f423 5280 	bic.w	r2, r3, #4096	; 0x1000
+ 8000576:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 8000578:	611a      	str	r2, [r3, #16]
+				break;
+ 800057a:	e00c      	b.n	8000596 <HAL_UART_Init+0x1fa>
+			case HAL_USART_WORD_LENGTH_9:
+				HAL_USART_CONFIG->CR2 &= (~(0x00000001 << HAL_USART_M));
+ 800057c:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 800057e:	691b      	ldr	r3, [r3, #16]
+ 8000580:	f423 5280 	bic.w	r2, r3, #4096	; 0x1000
+ 8000584:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 8000586:	611a      	str	r2, [r3, #16]
+				HAL_USART_CONFIG->CR2 |= HAL_USART_WRDL9_MSK;
+ 8000588:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 800058a:	691b      	ldr	r3, [r3, #16]
+ 800058c:	f443 5280 	orr.w	r2, r3, #4096	; 0x1000
+ 8000590:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 8000592:	611a      	str	r2, [r3, #16]
+				break;
+ 8000594:	bf00      	nop
+		}
+
+		switch(HAL_Uart->Parity)
+ 8000596:	687b      	ldr	r3, [r7, #4]
+ 8000598:	691b      	ldr	r3, [r3, #16]
+ 800059a:	2b02      	cmp	r3, #2
+ 800059c:	d006      	beq.n	80005ac <HAL_UART_Init+0x210>
+ 800059e:	2b02      	cmp	r3, #2
+ 80005a0:	d825      	bhi.n	80005ee <HAL_UART_Init+0x252>
+ 80005a2:	2b00      	cmp	r3, #0
+ 80005a4:	d016      	beq.n	80005d4 <HAL_UART_Init+0x238>
+ 80005a6:	2b01      	cmp	r3, #1
+ 80005a8:	d007      	beq.n	80005ba <HAL_UART_Init+0x21e>
+ 80005aa:	e020      	b.n	80005ee <HAL_UART_Init+0x252>
+		{
+			case HAL_USART_NO_PAIRTY:
+				HAL_USART_CONFIG->CR1 &= HAL_USART_PARITY_DIS;
+ 80005ac:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 80005ae:	68db      	ldr	r3, [r3, #12]
+ 80005b0:	f423 6280 	bic.w	r2, r3, #1024	; 0x400
+ 80005b4:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 80005b6:	60da      	str	r2, [r3, #12]
+				break;
+ 80005b8:	e019      	b.n	80005ee <HAL_UART_Init+0x252>
+			case HAL_USART_ODD_PARITY:
+				HAL_USART_CONFIG->CR1 |= HAL_USART_PARITY_EN;
+ 80005ba:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 80005bc:	68db      	ldr	r3, [r3, #12]
+ 80005be:	f443 6280 	orr.w	r2, r3, #1024	; 0x400
+ 80005c2:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 80005c4:	60da      	str	r2, [r3, #12]
+				HAL_USART_CONFIG->CR1 |= HAL_USART_PARITY_ODD;
+ 80005c6:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 80005c8:	68db      	ldr	r3, [r3, #12]
+ 80005ca:	f443 7200 	orr.w	r2, r3, #512	; 0x200
+ 80005ce:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 80005d0:	60da      	str	r2, [r3, #12]
+				break;
+ 80005d2:	e00c      	b.n	80005ee <HAL_UART_Init+0x252>
+			case HAL_USART_EVEN_PARITY:
+				HAL_USART_CONFIG->CR1 |= HAL_USART_PARITY_EN;
+ 80005d4:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 80005d6:	68db      	ldr	r3, [r3, #12]
+ 80005d8:	f443 6280 	orr.w	r2, r3, #1024	; 0x400
+ 80005dc:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 80005de:	60da      	str	r2, [r3, #12]
+				HAL_USART_CONFIG->CR1 &= HAL_USART_PARITY_EVEN;
+ 80005e0:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 80005e2:	68db      	ldr	r3, [r3, #12]
+ 80005e4:	f423 7200 	bic.w	r2, r3, #512	; 0x200
+ 80005e8:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 80005ea:	60da      	str	r2, [r3, #12]
+				break;
+ 80005ec:	bf00      	nop
+		}
+		/*Set Baud Rate of the USART Module should first calculate peripheral frequency which will be implemented later on*/
+		HAL_USART_CONFIG->BRR=Baud_Rate_Gen(SYS_FREQ,HAL_Uart->BaudRate);
+ 80005ee:	687b      	ldr	r3, [r7, #4]
+ 80005f0:	685b      	ldr	r3, [r3, #4]
+ 80005f2:	4619      	mov	r1, r3
+ 80005f4:	480e      	ldr	r0, [pc, #56]	; (8000630 <HAL_UART_Init+0x294>)
+ 80005f6:	f7ff febf 	bl	8000378 <Baud_Rate_Gen>
+ 80005fa:	4603      	mov	r3, r0
+ 80005fc:	461a      	mov	r2, r3
+ 80005fe:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 8000600:	609a      	str	r2, [r3, #8]
+		HAL_USART_CONFIG->CR1|=HAL_USART_UEEN_MSK;
+ 8000602:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 8000604:	68db      	ldr	r3, [r3, #12]
+ 8000606:	f443 5200 	orr.w	r2, r3, #8192	; 0x2000
+ 800060a:	6afb      	ldr	r3, [r7, #44]	; 0x2c
+ 800060c:	60da      	str	r2, [r3, #12]
+	}
+}
+ 800060e:	bf00      	nop
+ 8000610:	3730      	adds	r7, #48	; 0x30
+ 8000612:	46bd      	mov	sp, r7
+ 8000614:	bd80      	pop	{r7, pc}
+ 8000616:	bf00      	nop
+ 8000618:	40013800 	.word	0x40013800
+ 800061c:	40004400 	.word	0x40004400
+ 8000620:	40010800 	.word	0x40010800
+ 8000624:	40010c00 	.word	0x40010c00
+ 8000628:	40021000 	.word	0x40021000
+ 800062c:	40004800 	.word	0x40004800
+ 8000630:	007a1200 	.word	0x007a1200
+
+08000634 <HAL_UART_Byte>:
+
+void HAL_UART_Byte(USART_TypeDef *Handle,uint32_t data)
+{
+ 8000634:	b480      	push	{r7}
+ 8000636:	b083      	sub	sp, #12
+ 8000638:	af00      	add	r7, sp, #0
+ 800063a:	6078      	str	r0, [r7, #4]
+ 800063c:	6039      	str	r1, [r7, #0]
+	if(Handle!=NULL)
+ 800063e:	687b      	ldr	r3, [r7, #4]
+ 8000640:	2b00      	cmp	r3, #0
+ 8000642:	d00a      	beq.n	800065a <HAL_UART_Byte+0x26>
+	{
+		while(!(READ_BIT(Handle->SR,HAL_USART_TXE)));
+ 8000644:	bf00      	nop
+ 8000646:	687b      	ldr	r3, [r7, #4]
+ 8000648:	681b      	ldr	r3, [r3, #0]
+ 800064a:	09db      	lsrs	r3, r3, #7
+ 800064c:	f003 0301 	and.w	r3, r3, #1
+ 8000650:	2b00      	cmp	r3, #0
+ 8000652:	d0f8      	beq.n	8000646 <HAL_UART_Byte+0x12>
+		Handle->DR=data;
+ 8000654:	687b      	ldr	r3, [r7, #4]
+ 8000656:	683a      	ldr	r2, [r7, #0]
+ 8000658:	605a      	str	r2, [r3, #4]
+	}
+}
+ 800065a:	bf00      	nop
+ 800065c:	370c      	adds	r7, #12
+ 800065e:	46bd      	mov	sp, r7
+ 8000660:	bc80      	pop	{r7}
+ 8000662:	4770      	bx	lr
+
+08000664 <HAL_UART_Buffer>:
+
+void HAL_UART_Buffer(USART_TypeDef *Handle,uint8_t * Buffer,uint32_t Size)
+{
+ 8000664:	b580      	push	{r7, lr}
+ 8000666:	b086      	sub	sp, #24
+ 8000668:	af00      	add	r7, sp, #0
+ 800066a:	60f8      	str	r0, [r7, #12]
+ 800066c:	60b9      	str	r1, [r7, #8]
+ 800066e:	607a      	str	r2, [r7, #4]
+	if (Handle != NULL && Buffer!=NULL) {
+ 8000670:	68fb      	ldr	r3, [r7, #12]
+ 8000672:	2b00      	cmp	r3, #0
+ 8000674:	d015      	beq.n	80006a2 <HAL_UART_Buffer+0x3e>
+ 8000676:	68bb      	ldr	r3, [r7, #8]
+ 8000678:	2b00      	cmp	r3, #0
+ 800067a:	d012      	beq.n	80006a2 <HAL_UART_Buffer+0x3e>
+		uint32_t Byte_Tx=0;
+ 800067c:	2300      	movs	r3, #0
+ 800067e:	617b      	str	r3, [r7, #20]
+		while(Byte_Tx<=Size-1)
+ 8000680:	e00a      	b.n	8000698 <HAL_UART_Buffer+0x34>
+		{
+			HAL_UART_Byte(Handle,*(Buffer+Byte_Tx));
+ 8000682:	68ba      	ldr	r2, [r7, #8]
+ 8000684:	697b      	ldr	r3, [r7, #20]
+ 8000686:	4413      	add	r3, r2
+ 8000688:	781b      	ldrb	r3, [r3, #0]
+ 800068a:	4619      	mov	r1, r3
+ 800068c:	68f8      	ldr	r0, [r7, #12]
+ 800068e:	f7ff ffd1 	bl	8000634 <HAL_UART_Byte>
+			Byte_Tx++;
+ 8000692:	697b      	ldr	r3, [r7, #20]
+ 8000694:	3301      	adds	r3, #1
+ 8000696:	617b      	str	r3, [r7, #20]
+		while(Byte_Tx<=Size-1)
+ 8000698:	687b      	ldr	r3, [r7, #4]
+ 800069a:	3b01      	subs	r3, #1
+ 800069c:	697a      	ldr	r2, [r7, #20]
+ 800069e:	429a      	cmp	r2, r3
+ 80006a0:	d9ef      	bls.n	8000682 <HAL_UART_Buffer+0x1e>
+		}
+	}
+}
+ 80006a2:	bf00      	nop
+ 80006a4:	3718      	adds	r7, #24
+ 80006a6:	46bd      	mov	sp, r7
+ 80006a8:	bd80      	pop	{r7, pc}
+
+080006aa <HAL_UART_ReadByte>:
+
+uint8_t HAL_UART_ReadByte(USART_TypeDef *Handle)
+{
+ 80006aa:	b480      	push	{r7}
+ 80006ac:	b085      	sub	sp, #20
+ 80006ae:	af00      	add	r7, sp, #0
+ 80006b0:	6078      	str	r0, [r7, #4]
+	uint8_t ret=0;
+ 80006b2:	2300      	movs	r3, #0
+ 80006b4:	73fb      	strb	r3, [r7, #15]
+	if (Handle != NULL) {
+ 80006b6:	687b      	ldr	r3, [r7, #4]
+ 80006b8:	2b00      	cmp	r3, #0
+ 80006ba:	d00a      	beq.n	80006d2 <HAL_UART_ReadByte+0x28>
+		while (!(READ_BIT(Handle->SR, HAL_USART_RXE)));
+ 80006bc:	bf00      	nop
+ 80006be:	687b      	ldr	r3, [r7, #4]
+ 80006c0:	681b      	ldr	r3, [r3, #0]
+ 80006c2:	095b      	lsrs	r3, r3, #5
+ 80006c4:	f003 0301 	and.w	r3, r3, #1
+ 80006c8:	2b00      	cmp	r3, #0
+ 80006ca:	d0f8      	beq.n	80006be <HAL_UART_ReadByte+0x14>
+		ret=Handle->DR;
+ 80006cc:	687b      	ldr	r3, [r7, #4]
+ 80006ce:	685b      	ldr	r3, [r3, #4]
+ 80006d0:	73fb      	strb	r3, [r7, #15]
+	}
+	return ret;
+ 80006d2:	7bfb      	ldrb	r3, [r7, #15]
+}
+ 80006d4:	4618      	mov	r0, r3
+ 80006d6:	3714      	adds	r7, #20
+ 80006d8:	46bd      	mov	sp, r7
+ 80006da:	bc80      	pop	{r7}
+ 80006dc:	4770      	bx	lr
+	...
+
+080006e0 <main>:
+#endif
+
+uint8_t Key;
+
+int main(void)
+{
+ 80006e0:	b5b0      	push	{r4, r5, r7, lr}
+ 80006e2:	b08c      	sub	sp, #48	; 0x30
+ 80006e4:	af00      	add	r7, sp, #0
+	/*Configure USART */
+	UART_t USART={
+ 80006e6:	4b28      	ldr	r3, [pc, #160]	; (8000788 <main+0xa8>)
+ 80006e8:	f107 0414 	add.w	r4, r7, #20
+ 80006ec:	461d      	mov	r5, r3
+ 80006ee:	cd0f      	ldmia	r5!, {r0, r1, r2, r3}
+ 80006f0:	c40f      	stmia	r4!, {r0, r1, r2, r3}
+ 80006f2:	e895 0003 	ldmia.w	r5, {r0, r1}
+ 80006f6:	e884 0003 	stmia.w	r4, {r0, r1}
+			.Mode=HAL_USART_TRANSMIT_REC_MODE,
+			.Parity=HAL_USART_NO_PAIRTY,
+			.StopBits=HAL_USART_NO_STOP_BITS_1,
+			.WordLength=HAL_USART_WORD_LENGTH_8,
+	};
+	GPIO_t LED_Pin={
+ 80006fa:	1d3b      	adds	r3, r7, #4
+ 80006fc:	2200      	movs	r2, #0
+ 80006fe:	601a      	str	r2, [r3, #0]
+ 8000700:	605a      	str	r2, [r3, #4]
+ 8000702:	609a      	str	r2, [r3, #8]
+ 8000704:	60da      	str	r2, [r3, #12]
+ 8000706:	2301      	movs	r3, #1
+ 8000708:	607b      	str	r3, [r7, #4]
+ 800070a:	2302      	movs	r3, #2
+ 800070c:	60bb      	str	r3, [r7, #8]
+ 800070e:	2307      	movs	r3, #7
+ 8000710:	60fb      	str	r3, [r7, #12]
+			.Mode=HAL_GPIO_OUT_PP,
+			.PIN=GPIO_PIN_7,
+			.SPEED=HAL_GPIO_SPEED_FREQ_LOW,
+	};
+	HAL_Init_PIN(GPIOB,&LED_Pin);
+ 8000712:	1d3b      	adds	r3, r7, #4
+ 8000714:	4619      	mov	r1, r3
+ 8000716:	481d      	ldr	r0, [pc, #116]	; (800078c <main+0xac>)
+ 8000718:	f7ff fd2a 	bl	8000170 <HAL_Init_PIN>
+	HAL_UART_Init(&USART);
+ 800071c:	f107 0314 	add.w	r3, r7, #20
+ 8000720:	4618      	mov	r0, r3
+ 8000722:	f7ff fe3b 	bl	800039c <HAL_UART_Init>
+	uint8_t *Buffer="Ready To RX:";
+ 8000726:	4b1a      	ldr	r3, [pc, #104]	; (8000790 <main+0xb0>)
+ 8000728:	62fb      	str	r3, [r7, #44]	; 0x2c
+	HAL_UART_Buffer(USART.Instance,Buffer,12);
+ 800072a:	697b      	ldr	r3, [r7, #20]
+ 800072c:	220c      	movs	r2, #12
+ 800072e:	6af9      	ldr	r1, [r7, #44]	; 0x2c
+ 8000730:	4618      	mov	r0, r3
+ 8000732:	f7ff ff97 	bl	8000664 <HAL_UART_Buffer>
+	while(1)
+	{
+		Key=HAL_UART_ReadByte(USART.Instance);
+ 8000736:	697b      	ldr	r3, [r7, #20]
+ 8000738:	4618      	mov	r0, r3
+ 800073a:	f7ff ffb6 	bl	80006aa <HAL_UART_ReadByte>
+ 800073e:	4603      	mov	r3, r0
+ 8000740:	461a      	mov	r2, r3
+ 8000742:	4b14      	ldr	r3, [pc, #80]	; (8000794 <main+0xb4>)
+ 8000744:	701a      	strb	r2, [r3, #0]
+		if(Key=='a')
+ 8000746:	4b13      	ldr	r3, [pc, #76]	; (8000794 <main+0xb4>)
+ 8000748:	781b      	ldrb	r3, [r3, #0]
+ 800074a:	2b61      	cmp	r3, #97	; 0x61
+ 800074c:	d10b      	bne.n	8000766 <main+0x86>
+		{
+			HAL_Write_PIN(GPIOB,&LED_Pin,GPIO_SET);
+ 800074e:	1d3b      	adds	r3, r7, #4
+ 8000750:	2200      	movs	r2, #0
+ 8000752:	4619      	mov	r1, r3
+ 8000754:	480d      	ldr	r0, [pc, #52]	; (800078c <main+0xac>)
+ 8000756:	f7ff fddf 	bl	8000318 <HAL_Write_PIN>
+			HAL_UART_Byte(USART.Instance,'a');
+ 800075a:	697b      	ldr	r3, [r7, #20]
+ 800075c:	2161      	movs	r1, #97	; 0x61
+ 800075e:	4618      	mov	r0, r3
+ 8000760:	f7ff ff68 	bl	8000634 <HAL_UART_Byte>
+ 8000764:	e7e7      	b.n	8000736 <main+0x56>
+		}
+		else if(Key=='b')
+ 8000766:	4b0b      	ldr	r3, [pc, #44]	; (8000794 <main+0xb4>)
+ 8000768:	781b      	ldrb	r3, [r3, #0]
+ 800076a:	2b62      	cmp	r3, #98	; 0x62
+ 800076c:	d1e3      	bne.n	8000736 <main+0x56>
+		{
+			HAL_Write_PIN(GPIOB,&LED_Pin,GPIO_RESET);
+ 800076e:	1d3b      	adds	r3, r7, #4
+ 8000770:	2201      	movs	r2, #1
+ 8000772:	4619      	mov	r1, r3
+ 8000774:	4805      	ldr	r0, [pc, #20]	; (800078c <main+0xac>)
+ 8000776:	f7ff fdcf 	bl	8000318 <HAL_Write_PIN>
+			HAL_UART_Byte(USART.Instance,'b');
+ 800077a:	697b      	ldr	r3, [r7, #20]
+ 800077c:	2162      	movs	r1, #98	; 0x62
+ 800077e:	4618      	mov	r0, r3
+ 8000780:	f7ff ff58 	bl	8000634 <HAL_UART_Byte>
+		Key=HAL_UART_ReadByte(USART.Instance);
+ 8000784:	e7d7      	b.n	8000736 <main+0x56>
+ 8000786:	bf00      	nop
+ 8000788:	0800085c 	.word	0x0800085c
+ 800078c:	40010c00 	.word	0x40010c00
+ 8000790:	0800084c 	.word	0x0800084c
+ 8000794:	2000001c 	.word	0x2000001c
+
+08000798 <Reset_Handler>:
+
+  .section .text.Reset_Handler
+  .weak Reset_Handler
+  .type Reset_Handler, %function
+Reset_Handler:
+  ldr   r0, =_estack
+ 8000798:	480d      	ldr	r0, [pc, #52]	; (80007d0 <LoopForever+0x2>)
+  mov   sp, r0          /* set stack pointer */
+ 800079a:	4685      	mov	sp, r0
+/* Call the clock system intitialization function.*/
+  bl  SystemInit
+ 800079c:	f3af 8000 	nop.w
+
+/* Copy the data segment initializers from flash to SRAM */
+  ldr r0, =_sdata
+ 80007a0:	480c      	ldr	r0, [pc, #48]	; (80007d4 <LoopForever+0x6>)
+  ldr r1, =_edata
+ 80007a2:	490d      	ldr	r1, [pc, #52]	; (80007d8 <LoopForever+0xa>)
+  ldr r2, =_sidata
+ 80007a4:	4a0d      	ldr	r2, [pc, #52]	; (80007dc <LoopForever+0xe>)
+  movs r3, #0
+ 80007a6:	2300      	movs	r3, #0
+  b LoopCopyDataInit
+ 80007a8:	e002      	b.n	80007b0 <LoopCopyDataInit>
+
+080007aa <CopyDataInit>:
+
+CopyDataInit:
+  ldr r4, [r2, r3]
+ 80007aa:	58d4      	ldr	r4, [r2, r3]
+  str r4, [r0, r3]
+ 80007ac:	50c4      	str	r4, [r0, r3]
+  adds r3, r3, #4
+ 80007ae:	3304      	adds	r3, #4
+
+080007b0 <LoopCopyDataInit>:
+
+LoopCopyDataInit:
+  adds r4, r0, r3
+ 80007b0:	18c4      	adds	r4, r0, r3
+  cmp r4, r1
+ 80007b2:	428c      	cmp	r4, r1
+  bcc CopyDataInit
+ 80007b4:	d3f9      	bcc.n	80007aa <CopyDataInit>
+
+/* Zero fill the bss segment. */
+  ldr r2, =_sbss
+ 80007b6:	4a0a      	ldr	r2, [pc, #40]	; (80007e0 <LoopForever+0x12>)
+  ldr r4, =_ebss
+ 80007b8:	4c0a      	ldr	r4, [pc, #40]	; (80007e4 <LoopForever+0x16>)
+  movs r3, #0
+ 80007ba:	2300      	movs	r3, #0
+  b LoopFillZerobss
+ 80007bc:	e001      	b.n	80007c2 <LoopFillZerobss>
+
+080007be <FillZerobss>:
+
+FillZerobss:
+  str  r3, [r2]
+ 80007be:	6013      	str	r3, [r2, #0]
+  adds r2, r2, #4
+ 80007c0:	3204      	adds	r2, #4
+
+080007c2 <LoopFillZerobss>:
+
+LoopFillZerobss:
+  cmp r2, r4
+ 80007c2:	42a2      	cmp	r2, r4
+  bcc FillZerobss
+ 80007c4:	d3fb      	bcc.n	80007be <FillZerobss>
+
+/* Call static constructors */
+  bl __libc_init_array
+ 80007c6:	f000 f811 	bl	80007ec <__libc_init_array>
+/* Call the application's entry point.*/
+  bl main
+ 80007ca:	f7ff ff89 	bl	80006e0 <main>
+
+080007ce <LoopForever>:
+
+LoopForever:
+    b LoopForever
+ 80007ce:	e7fe      	b.n	80007ce <LoopForever>
+  ldr   r0, =_estack
+ 80007d0:	20005000 	.word	0x20005000
+  ldr r0, =_sdata
+ 80007d4:	20000000 	.word	0x20000000
+  ldr r1, =_edata
+ 80007d8:	20000000 	.word	0x20000000
+  ldr r2, =_sidata
+ 80007dc:	0800087c 	.word	0x0800087c
+  ldr r2, =_sbss
+ 80007e0:	20000000 	.word	0x20000000
+  ldr r4, =_ebss
+ 80007e4:	20000020 	.word	0x20000020
+
+080007e8 <ADC1_2_IRQHandler>:
+ * @retval : None
+*/
+  .section .text.Default_Handler,"ax",%progbits
+Default_Handler:
+Infinite_Loop:
+  b Infinite_Loop
+ 80007e8:	e7fe      	b.n	80007e8 <ADC1_2_IRQHandler>
+	...
+
+080007ec <__libc_init_array>:
+ 80007ec:	b570      	push	{r4, r5, r6, lr}
+ 80007ee:	2600      	movs	r6, #0
+ 80007f0:	4d0c      	ldr	r5, [pc, #48]	; (8000824 <__libc_init_array+0x38>)
+ 80007f2:	4c0d      	ldr	r4, [pc, #52]	; (8000828 <__libc_init_array+0x3c>)
+ 80007f4:	1b64      	subs	r4, r4, r5
+ 80007f6:	10a4      	asrs	r4, r4, #2
+ 80007f8:	42a6      	cmp	r6, r4
+ 80007fa:	d109      	bne.n	8000810 <__libc_init_array+0x24>
+ 80007fc:	f000 f81a 	bl	8000834 <_init>
+ 8000800:	2600      	movs	r6, #0
+ 8000802:	4d0a      	ldr	r5, [pc, #40]	; (800082c <__libc_init_array+0x40>)
+ 8000804:	4c0a      	ldr	r4, [pc, #40]	; (8000830 <__libc_init_array+0x44>)
+ 8000806:	1b64      	subs	r4, r4, r5
+ 8000808:	10a4      	asrs	r4, r4, #2
+ 800080a:	42a6      	cmp	r6, r4
+ 800080c:	d105      	bne.n	800081a <__libc_init_array+0x2e>
+ 800080e:	bd70      	pop	{r4, r5, r6, pc}
+ 8000810:	f855 3b04 	ldr.w	r3, [r5], #4
+ 8000814:	4798      	blx	r3
+ 8000816:	3601      	adds	r6, #1
+ 8000818:	e7ee      	b.n	80007f8 <__libc_init_array+0xc>
+ 800081a:	f855 3b04 	ldr.w	r3, [r5], #4
+ 800081e:	4798      	blx	r3
+ 8000820:	3601      	adds	r6, #1
+ 8000822:	e7f2      	b.n	800080a <__libc_init_array+0x1e>
+ 8000824:	08000874 	.word	0x08000874
+ 8000828:	08000874 	.word	0x08000874
+ 800082c:	08000874 	.word	0x08000874
+ 8000830:	08000878 	.word	0x08000878
+
+08000834 <_init>:
+ 8000834:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 8000836:	bf00      	nop
+ 8000838:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 800083a:	bc08      	pop	{r3}
+ 800083c:	469e      	mov	lr, r3
+ 800083e:	4770      	bx	lr
+
+08000840 <_fini>:
+ 8000840:	b5f8      	push	{r3, r4, r5, r6, r7, lr}
+ 8000842:	bf00      	nop
+ 8000844:	bcf8      	pop	{r3, r4, r5, r6, r7}
+ 8000846:	bc08      	pop	{r3}
+ 8000848:	469e      	mov	lr, r3
+ 800084a:	4770      	bx	lr

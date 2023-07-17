@@ -1,0 +1,6 @@
+HAL_Usart.c:9:17:Baud_Rate_Gen	16	static
+HAL_Usart.c:14:6:HAL_UART_Init	56	static
+HAL_Usart.c:112:6:HAL_UART_Byte	16	static
+HAL_Usart.c:121:6:HAL_UART_Buffer	32	static
+HAL_Usart.c:133:9:HAL_UART_ReadByte	24	static
+HAL_Usart.c:143:6:HAL_UART_ReadBuffer	40	static
