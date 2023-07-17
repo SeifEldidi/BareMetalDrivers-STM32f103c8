@@ -1,6 +1,0 @@
-"./Src/HAL_Gpio.o"
-"./Src/HAL_Usart.o"
-"./Src/main.o"
-"./Src/syscalls.o"
-"./Src/sysmem.o"
-"./Startup/startup_stm32f103c8tx.o"
