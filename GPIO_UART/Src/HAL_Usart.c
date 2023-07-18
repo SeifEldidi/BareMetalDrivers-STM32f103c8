@@ -162,6 +162,7 @@ void HAL_UART_Init(UART_t *HAL_Uart)
 	{
 		USART_TypeDef *HAL_USART_CONFIG=HAL_Uart->Instance;
 		GPIO_TypeDef  *GPIO_PORT=NULL;
+		uint32_t USART_PERIPH_CLK=0;
 		GPIO_t TX;
 		GPIO_t RX;
 
