@@ -326,4 +326,3 @@ uint32_t HAL_TIMER_ReadVal(TimerU_D_t *Timer)
 {
 	return Timer->Instance->CNT;
 }
-
