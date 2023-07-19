@@ -294,7 +294,7 @@ void HAL_TIMER_DelayUs(TimerU_D_t *Timer,uint32_t Delay)
 		TIM_CLK = CLK_CALC(TIM_CLK, SH_M);
 		break;
 	}
-	/*-----Set base to 1ms-----*/
+	/*-----Set base to 1us-----*/
 	L_VAL /= (Timer->Instance->PSC); //div by prescaler to find final clock
 	L_VAL = TIM_CLK / 1000000;           //1ms Time Base
 	Timer->Instance->ARR = L_VAL;    //Load Val into ARR
