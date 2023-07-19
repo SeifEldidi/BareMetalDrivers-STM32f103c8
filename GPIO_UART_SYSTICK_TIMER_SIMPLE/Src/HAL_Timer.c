@@ -8,8 +8,11 @@
 
 uint32_t CLK_CALC(uint32_t CLK,uint8_t SH);
 uint32_t PLL_CLK_CALC();
+static void EN_CLOCK(TimerU_D_t *Timer);
 static void HAL_TIMER_OUTCMP_Init(TimerU_D_t *Timer);
 static void HAL_TIMER_TIMEBASE_init(TimerU_D_t *Timer);
+static void HAL_TIMER_PWM_init(TimerU_D_t *Timer);
+static void HAL_TIMER_CHN_CONFIG_GPIO(TIM_TypeDef *TIME,uint32_t CHN);
 
 void HAL_TIMER_init(TimerU_D_t *Timer)
 {
@@ -26,7 +29,42 @@ void HAL_TIMER_init(TimerU_D_t *Timer)
 			case HAL_TIMER_OP_CMP_MODE:
 				HAL_TIMER_OUTCMP_Init(Timer);
 				break;
+			case HAL_TIMER_OP_PWM_MODE:
+				HAL_TIMER_PWM_init(Timer);
+				break;
 		}
+	}
+}
+
+static void EN_CLOCK(TimerU_D_t *Timer)
+{
+	if (Timer->Instance == TIM2)
+		HAL_RCC_TIMER2_EN();
+	else if (Timer->Instance == TIM3)
+		HAL_RCC_TIMER3_EN();
+	else if (Timer->Instance == TIM4)
+		HAL_RCC_TIMER4_EN();
+	else {
+
+	}
+}
+
+static void EN_CLOCK_OP(TimerU_D_t *Timer) {
+	uint8_t CNT;
+	if (Timer->Instance == TIM2) {
+		HAL_RCC_TIMER2_EN();
+		for (CNT = 0; CNT <= Timer->NO_CMP_CHNS - 1; CNT++)
+			HAL_TIMER_CHN_CONFIG_GPIO(TIM2, Timer->CMP_CHN[CNT]);
+	} else if (Timer->Instance == TIM3) {
+		HAL_RCC_TIMER3_EN();
+		for (CNT = 0; CNT <= Timer->NO_CMP_CHNS - 1; CNT++)
+			HAL_TIMER_CHN_CONFIG_GPIO(TIM2, Timer->CMP_CHN[CNT]);
+	} else if (Timer->Instance == TIM4) {
+		HAL_RCC_TIMER4_EN();
+		for (CNT = 0; CNT <= Timer->NO_CMP_CHNS - 1; CNT++)
+			HAL_TIMER_CHN_CONFIG_GPIO(TIM2, Timer->CMP_CHN[CNT]);
+	} else {
+
 	}
 }
 
@@ -36,15 +74,7 @@ static void HAL_TIMER_TIMEBASE_init(TimerU_D_t *Timer)
 	if( Timer != NULL)
 	{
 		/*----Enable Timer Clock----*/
-		if(Timer->Instance == TIM2)
-			HAL_RCC_TIMER2_EN();
-		else if(Timer->Instance == TIM3)
-			HAL_RCC_TIMER3_EN();
-		else if(Timer->Instance == TIM4)
-			HAL_RCC_TIMER4_EN();
-		else{
-
-		}
+		EN_CLOCK(Timer);
 		/*---Select Mode of operation----*/
 		switch(Timer->Mode)
 		{
@@ -83,6 +113,7 @@ static void HAL_TIMER_CHN_CONFIG_GPIO(TIM_TypeDef *TIME,uint32_t CHN)
 {
 	GPIO_t Pin;
 	GPIO_TypeDef *GPIO_PORT=NULL;
+
 
 	Pin.Mode  = HAL_GPIO_OUT_ALT_PP;
 	Pin.SPEED = HAL_GPIO_SPEED_FREQ_HIGH;
@@ -154,27 +185,7 @@ static void HAL_TIMER_OUTCMP_Init(TimerU_D_t *Timer)
 	{
 		uint8_t CNT=0;
 		/*----Enable Timer Clock----*/
-		if (Timer->Instance == TIM2)
-		{
-			HAL_RCC_TIMER2_EN();
-			for(CNT=0;CNT<=Timer->NO_CMP_CHNS-1;CNT++)
-				HAL_TIMER_CHN_CONFIG_GPIO(TIM2,Timer->CMP_CHN[CNT]);
-		}
-		else if (Timer->Instance == TIM3)
-		{
-			HAL_RCC_TIMER3_EN();
-			for(CNT=0;CNT<=Timer->NO_CMP_CHNS-1;CNT++)
-				HAL_TIMER_CHN_CONFIG_GPIO(TIM2,Timer->CMP_CHN[CNT]);
-		}
-		else if (Timer->Instance == TIM4)
-		{
-			HAL_RCC_TIMER4_EN();
-			for (CNT = 0; CNT <= Timer->NO_CMP_CHNS - 1; CNT++)
-				HAL_TIMER_CHN_CONFIG_GPIO(TIM2, Timer->CMP_CHN[CNT]);
-		}
-		else {
-
-		}
+		EN_CLOCK_OP(Timer);
 
 		/*-----------Enable Channel----------*/
 		for(CNT=0;CNT<=Timer->NO_CMP_CHNS-1;CNT++)
@@ -249,6 +260,96 @@ static void HAL_TIMER_OUTCMP_Init(TimerU_D_t *Timer)
 		Timer->Instance->CR1 |= HAL_TIMER_CNT_EN;
 	}
 }
+
+static void HAL_TIMER_PWM_init(TimerU_D_t *Timer)
+{
+	if(Timer != NULL)
+	{
+		uint8_t CNT=0;
+		/*--------ENable CLOCK----*/
+		EN_CLOCK_OP(Timer);
+
+		Timer->Instance->ARR = Timer->ARR_val;
+		Timer->Instance->PSC = Timer->Prescaler;
+		for (CNT = 0; CNT <= Timer->NO_CMP_CHNS - 1; CNT++) {
+			switch (Timer->CMP_CHN[CNT]) {
+			case HAL_TIMER_CMP_OUT_CHN_1:
+				switch (Timer->CMP_Modes[CNT]) {
+					case HAL_TIMER_PWM_OUT_MODE1:
+						Timer->Instance->CCMR1 |= (0b110 << 4);
+						break;
+					case HAL_TIMER_PWM_OUT_MODE2:
+						Timer->Instance->CCMR1 |= (0b111 << 4);
+						break;
+				}
+				Timer->Instance->CCR1 = ((Timer->CCR_val[CNT] * Timer->ARR_val)/100);
+				Timer->Instance->CCER |= (1 << HAL_TIMER_CC1E_POS);
+				break;
+			case HAL_TIMER_CMP_OUT_CHN_2:
+				switch (Timer->CMP_Modes[CNT]) {
+					case HAL_TIMER_PWM_OUT_MODE1:
+						Timer->Instance->CCMR1 |= (0b110 << 12);
+						break;
+					case HAL_TIMER_PWM_OUT_MODE2:
+						Timer->Instance->CCMR1 |= (0b111 << 12);
+						break;
+				}
+				Timer->Instance->CCR2 = ((Timer->CCR_val[CNT] * Timer->ARR_val)/100);
+				Timer->Instance->CCER |= (1 << HAL_TIMER_CC2E_POS);
+				break;
+			case HAL_TIMER_CMP_OUT_CHN_3:
+				switch (Timer->CMP_Modes[CNT]) {
+					case HAL_TIMER_PWM_OUT_MODE1:
+						Timer->Instance->CCMR2 |= (0b110 << 4);
+						break;
+					case HAL_TIMER_PWM_OUT_MODE2:
+						Timer->Instance->CCMR2 |= (0b111 << 4);
+						break;
+				}
+				Timer->Instance->CCR3 = ((Timer->CCR_val[CNT] * Timer->ARR_val)/100);//duty Cycle
+				Timer->Instance->CCER |= (1 << HAL_TIMER_CC3E_POS);
+				break;
+			case HAL_TIMER_CMP_OUT_CHN_4:
+				switch (Timer->CMP_Modes[CNT]) {
+					case HAL_TIMER_PWM_OUT_MODE1:
+						Timer->Instance->CCMR2 |= (0b110 << 12);
+						break;
+					case HAL_TIMER_PWM_OUT_MODE2:
+						Timer->Instance->CCMR2 |= (0b111 << 12);
+						break;
+				}
+				Timer->Instance->CCR4 = ((Timer->CCR_val[CNT] * Timer->ARR_val)/100);
+				Timer->Instance->CCER |= (1 << HAL_TIMER_CC4E_POS);
+				break;
+			}
+		}
+
+		Timer->Instance->CR1 |= HAL_TIMER_CNT_EN;
+	}
+}
+
+void HAL_TIMER_SETDutyChannelCycle(TimerU_D_t *Timer,uint8_t Channel,uint8_t Duty)
+{
+	if( Timer != NULL)
+	{
+		/*----Select Channel Modify Duty----*/
+		switch (Channel) {
+			case HAL_TIMER_CMP_OUT_CHN_1:
+				Timer->Instance->CCR1 = ((Duty * Timer->ARR_val)/ 100);
+				break;
+			case HAL_TIMER_CMP_OUT_CHN_2:
+				Timer->Instance->CCR2 = ((Duty* Timer->ARR_val)	/ 100);
+				break;
+			case HAL_TIMER_CMP_OUT_CHN_3:
+			    Timer->Instance->CCR3 = ((Duty* Timer->ARR_val)	/ 100); //duty Cycle
+				break;
+			case HAL_TIMER_CMP_OUT_CHN_4:
+				Timer->Instance->CCR4 = ((Duty* Timer->ARR_val)	/ 100);
+				break;
+		}
+	}
+}
+
 void HAL_TIMER_DelayMs(TimerU_D_t *Timer,uint32_t Delay)
 {
 	uint32_t L_VAL=0;
@@ -294,7 +395,7 @@ void HAL_TIMER_DelayUs(TimerU_D_t *Timer,uint32_t Delay)
 		TIM_CLK = CLK_CALC(TIM_CLK, SH_M);
 		break;
 	}
-	/*-----Set base to 1us-----*/
+	/*-----Set base to 1ms-----*/
 	L_VAL /= (Timer->Instance->PSC); //div by prescaler to find final clock
 	L_VAL = TIM_CLK / 1000000;           //1ms Time Base
 	Timer->Instance->ARR = L_VAL;    //Load Val into ARR
@@ -326,3 +427,4 @@ uint32_t HAL_TIMER_ReadVal(TimerU_D_t *Timer)
 {
 	return Timer->Instance->CNT;
 }
+
