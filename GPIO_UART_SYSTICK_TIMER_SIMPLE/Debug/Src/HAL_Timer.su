@@ -1,0 +1,9 @@
+HAL_Timer.c:14:6:HAL_TIMER_init	16	static
+HAL_Timer.c:34:13:HAL_TIMER_TIMEBASE_init	16	static
+HAL_Timer.c:82:13:HAL_TIMER_CHN_CONFIG_GPIO	40	static
+HAL_Timer.c:151:13:HAL_TIMER_OUTCMP_Init	24	static
+HAL_Timer.c:252:6:HAL_TIMER_DelayMs	32	static
+HAL_Timer.c:281:6:HAL_TIMER_DelayUs	32	static
+HAL_Timer.c:310:6:HAL_TIMER_DelaySP	24	static
+HAL_Timer.c:320:6:HAL_TIMER_LoadVal	16	static
+HAL_Timer.c:325:10:HAL_TIMER_ReadVal	16	static

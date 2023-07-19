@@ -1,0 +1,3 @@
+CortexM3_Core_Systick.c:13:6:SYSTICK_INIT	8	static
+CortexM3_Core_Systick.c:27:6:SYSTICK_Delay_ms	24	static
+CortexM3_Core_Systick.c:44:10:SYSTICK_READ_COUNTER	4	static

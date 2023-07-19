@@ -1,0 +1,10 @@
+HAL_Adc.c:13:6:HAL_ADC_Init	16	static
+HAL_Adc.c:40:13:HAL_ADC_WTD_EN	16	static
+HAL_Adc.c:57:13:HAL_ADC_CHN_SET	32	static
+HAL_Adc.c:165:13:HAL_SHN_ALLGN_SET	16	static
+HAL_Adc.c:177:13:HAL_ADC_MULTCHN_SET	40	static
+HAL_Adc.c:291:13:HAL_SHN_Init	16	static
+HAL_Adc.c:319:13:HAL_MULT_SING_Init	24	static
+HAL_Adc.c:347:17:HAL_ADC_SHN_READ	24	static
+HAL_Adc.c:374:16:HAL_ADC_MHN_READ	32	static
+HAL_Adc.c:405:9:HAL_ADC_READ	24	static
