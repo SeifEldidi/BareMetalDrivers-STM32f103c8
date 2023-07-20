@@ -72,7 +72,7 @@ void (*EXTI_CLL15) 	    (void)=NULL;
 
 /*Will be updated With Interrupts Soon*/
 
-static void AFIO_CONFIG(GPIO_TypeDef *GPIO_PORT ,uint8_t SH,uint8_t ORD)
+static void AFIO_CONFIG(GPIO_TypeDef *GPIO_PORT ,uint8_t ORD,uint8_t SH)
 {
 	if (GPIO_PORT == GPIOA) {
 		AFIO->EXTICR[ORD] = (0b000) << SH;
