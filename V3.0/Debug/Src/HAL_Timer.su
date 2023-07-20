@@ -1,0 +1,15 @@
+HAL_Timer.c:18:6:HAL_TIMER_init	16	static
+HAL_Timer.c:43:13:EN_CLOCK	16	static
+HAL_Timer.c:56:13:EN_CLOCK_OP	24	static
+HAL_Timer.c:76:13:HAL_TIMER_TIMEBASE_init	16	static
+HAL_Timer.c:116:13:HAL_TIMER_CHN_CONFIG_GPIO	56	static
+HAL_Timer.c:191:13:HAL_TIMER_OUTCMP_Init	24	static
+HAL_Timer.c:273:13:HAL_TIMER_PWM_init	24	static
+HAL_Timer.c:340:13:HAL_TIMER_IPCAP_init	24	static
+HAL_Timer.c:405:6:HAL_TIMER_SETDutyChannelCycle	16	static
+HAL_Timer.c:427:10:HAL_TIMER_EDG_CAP_Read	16	static
+HAL_Timer.c:454:6:HAL_TIMER_DelayMs	32	static
+HAL_Timer.c:483:6:HAL_TIMER_DelayUs	32	static
+HAL_Timer.c:512:6:HAL_TIMER_DelaySP	24	static
+HAL_Timer.c:522:6:HAL_TIMER_LoadVal	16	static
+HAL_Timer.c:527:10:HAL_TIMER_ReadVal	16	static

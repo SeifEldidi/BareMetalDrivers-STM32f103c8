@@ -1,0 +1,12 @@
+HAL_Adc.c:18:13:HAL_EDGE_INT_init	16	static
+HAL_Adc.c:29:6:HAL_ADC_Init	16	static
+HAL_Adc.c:59:13:HAL_ADC_WTD_EN	16	static
+HAL_Adc.c:76:13:HAL_ADC_CHN_SET	48	static
+HAL_Adc.c:184:13:HAL_SHN_ALLGN_SET	16	static
+HAL_Adc.c:196:13:HAL_ADC_MULTCHN_SET	56	static
+HAL_Adc.c:310:13:HAL_SHN_Init	16	static
+HAL_Adc.c:338:13:HAL_MULT_SING_Init	24	static
+HAL_Adc.c:366:17:HAL_ADC_SHN_READ	24	static
+HAL_Adc.c:393:16:HAL_ADC_MHN_READ	32	static
+HAL_Adc.c:424:10:HAL_ADC_READ_INT	32	static
+HAL_Adc.c:443:9:HAL_ADC_READ	24	static

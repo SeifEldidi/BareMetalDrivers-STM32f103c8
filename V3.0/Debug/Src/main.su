@@ -1,0 +1,5 @@
+main.c:19:5:__io_putchar	16	static
+main.c:81:5:main	304	static
+main.c:138:6:SYSTICK_INC	8	static
+main.c:148:6:USART_handler	8	static
+main.c:157:6:PIN_Pressed	4	static
