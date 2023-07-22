@@ -1,0 +1,8 @@
+core_cm3.h:1511:22:__NVIC_EnableIRQ	16	static
+HAL_Gpio.c:75:13:AFIO_CONFIG	16	static
+HAL_Gpio.c:90:6:HAL_Init_PIN	32	static,ignoring_inline_asm
+HAL_Gpio.c:374:6:HAL_DeInit_PIN	16	static
+HAL_Gpio.c:379:6:HAL_Write_PIN	24	static
+HAL_Gpio.c:395:6:HAL_Toggle_PIN	16	static
+HAL_Gpio.c:402:12:HAL_Read_PIN	24	static
+HAL_Gpio.c:415:6:EXTI0_IRQHandler	8	static

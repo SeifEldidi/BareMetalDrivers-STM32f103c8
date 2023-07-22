@@ -1,0 +1,8 @@
+main.c:20:5:__io_putchar	16	static
+main.c:37:6:NVIC_int	4	static
+main.c:70:5:main	312	static
+main.c:128:6:TIM2_CAPT_VAL	4	static
+main.c:133:6:SYSTICK_INC	8	static
+main.c:143:6:ADC_Handler	8	static
+main.c:149:6:USART_handler	8	static
+main.c:158:6:PIN_Pressed	4	static

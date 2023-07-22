@@ -1,0 +1,12 @@
+core_cm3.h:1511:22:__NVIC_EnableIRQ	16	static
+core_cm3.h:1639:22:__NVIC_SetPriority	16	static
+HAL_Adc.c:18:13:HAL_EDGE_INT_init	16	static,ignoring_inline_asm
+HAL_Adc.c:30:6:HAL_ADC_Init	16	static
+HAL_Adc.c:60:13:HAL_ADC_WTD_EN	16	static
+HAL_Adc.c:77:13:HAL_ADC_CHN_SET	48	static
+HAL_Adc.c:185:13:HAL_SHN_ALLGN_SET	16	static
+HAL_Adc.c:197:13:HAL_ADC_MULTCHN_SET	56	static
+HAL_Adc.c:311:13:HAL_SHN_Init	16	static
+HAL_Adc.c:339:13:HAL_MULT_SING_Init	24	static
+HAL_Adc.c:427:10:HAL_ADC_READ_INT	32	static
+HAL_Adc.c:471:6:ADC1_2_IRQHandler	8	static

@@ -1,0 +1,12 @@
+core_cm3.h:1511:22:__NVIC_EnableIRQ	16	static
+HAL_Usart.c:26:17:Baud_Rate_Gen	16	static
+HAL_Usart.c:31:17:PLL_CLK_CALC_S	16	static
+HAL_Usart.c:87:10:PLL_CLK_CALC	16	static
+HAL_Usart.c:114:10:CLK_CALC	24	static
+HAL_Usart.c:176:13:HAL_UART_INT_init	16	static,ignoring_inline_asm
+HAL_Usart.c:200:6:HAL_UART_Init	88	static
+HAL_Usart.c:316:6:HAL_UART_Byte	16	static
+HAL_Usart.c:325:6:HAL_UART_Buffer	32	static
+HAL_Usart.c:338:9:HAL_UART_ReadByte	24	static
+HAL_Usart.c:348:6:HAL_UART_ReadBuffer	40	static
+HAL_Usart.c:382:6:USART3_IRQHandler	8	static
